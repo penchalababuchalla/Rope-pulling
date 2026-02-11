@@ -1,0 +1,287 @@
+<div class="game-container">
+  <!-- Setup screen -->
+  @if (!gameStarted()) {
+    <div class="setup-card">
+      <h1 class="title">Tug of War: Mathematics</h1>
+      <p class="subtitle">Solve fast! Pull the rope to your side. First to pull it all the way wins.</p>
+
+      <div class="setup-section">
+        <h2>Choose numbers to practice</h2>
+        <div class="number-chips">
+          @for (n of numberOptions; track n) {
+            <button
+              type="button"
+              class="chip"
+              [class.chip-selected]="selectedNumbers().includes(n)"
+              (click)="toggleNumber(n)"
+            >
+              {{ n }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <h2>Problem type</h2>
+        <div class="type-buttons">
+          <button
+            type="button"
+            class="type-btn"
+            [class.active]="problemType() === 'add'"
+            (click)="setProblemType('add')"
+          >
+            Addition
+          </button>
+          <button
+            type="button"
+            class="type-btn"
+            [class.active]="problemType() === 'subtract'"
+            (click)="setProblemType('subtract')"
+          >
+            Subtraction
+          </button>
+          <button
+            type="button"
+            class="type-btn"
+            [class.active]="problemType() === 'multiply'"
+            (click)="setProblemType('multiply')"
+          >
+            Multiplication
+          </button>
+          <button
+            type="button"
+            class="type-btn"
+            [class.active]="problemType() === 'divide'"
+            (click)="setProblemType('divide')"
+          >
+            Division
+          </button>
+          <button
+            type="button"
+            class="type-btn"
+            [class.active]="problemType() === 'both'"
+            (click)="setProblemType('both')"
+          >
+            × & ÷
+          </button>
+          <button
+            type="button"
+            class="type-btn"
+            [class.active]="problemType() === 'all'"
+            (click)="setProblemType('all')"
+          >
+            All
+          </button>
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <h2>Play mode</h2>
+        <div class="play-mode-buttons">
+          <button
+            type="button"
+            class="mode-btn"
+            [class.active]="playMode() === 'computer'"
+            (click)="setPlayMode('computer')"
+          >
+            <span class="mode-icon">🖥️</span>
+            Vs Computer
+          </button>
+          <button
+            type="button"
+            class="mode-btn"
+            [class.active]="playMode() === 'friend'"
+            (click)="setPlayMode('friend')"
+          >
+            <span class="mode-icon">👥</span>
+            Play with Friend
+          </button>
+        </div>
+      </div>
+
+      <button type="button" class="btn-start" (click)="startGame()">
+        Start game
+      </button>
+    </div>
+  }
+
+  <!-- Game screen – Tug of War: Mathematics layout -->
+  @if (gameStarted()) {
+    <div class="game-area tug-theme">
+      <header class="game-header">
+        <button type="button" class="header-btn" (click)="gameStarted.set(false)" aria-label="Close">✕</button>
+        <h1 class="game-title">Tug of War: Mathematics</h1>
+      </header>
+
+      <div class="main-title">TUG OF WAR: MATHEMATICS</div>
+
+      <div class="scoreboard">
+        <div class="scoreboard-team team1">
+          <span class="scoreboard-label">Team 1</span>
+          <span class="scoreboard-value">{{ team1Score() }}</span>
+        </div>
+        <div class="scoreboard-timer" aria-live="polite">
+          <span class="timer-icon">⏱</span>
+          <span class="timer-value">{{ timerDisplay() }}</span>
+        </div>
+        <div class="scoreboard-team team2">
+          <span class="scoreboard-label">Team 2</span>
+          <span class="scoreboard-value">{{ team2Score() }}</span>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <!-- Left panel: Team 1 -->
+        <aside class="team-panel team1-panel">
+          <div class="panel-header team1-header">
+            <span class="panel-title">Team 1</span>
+            <span class="panel-badge">{{ team1Score() }}</span>
+          </div>
+          @if (currentProblem(); as problem) {
+            <div class="problem-box team1-box">
+              <div class="problem-text">{{ problem.text }}</div>
+              <input
+                type="text"
+                inputmode="none"
+                class="answer-input"
+                [(ngModel)]="playerAnswer"
+                (keydown.enter)="submitAnswer()"
+                placeholder="0"
+                [class.wrong]="showWrong()"
+                [attr.aria-label]="'Your answer for ' + problem.text"
+                readonly
+              />
+              @if (showWrong()) {
+                <div class="wrong-hint">Try again!</div>
+              }
+              <div class="virtual-keypad" role="group" aria-label="Number keypad for Team 1">
+                <div class="keypad-grid">
+                  @for (d of [1,2,3,4,5,6,7,8,9]; track d) {
+                    <button type="button" class="keypad-btn" (click)="keypadDigit('left', d)">{{ d }}</button>
+                  }
+                </div>
+                <div class="keypad-actions">
+                  <button type="button" class="keypad-btn keypad-0" (click)="keypadDigit('left', 0)">0</button>
+                  <button type="button" class="keypad-btn keypad-clear" (click)="keypadClear('left')" aria-label="Clear">✕</button>
+                  <button type="button" class="keypad-btn keypad-submit" (click)="submitAnswer()" aria-label="Submit">✓</button>
+                </div>
+              </div>
+            </div>
+          }
+        </aside>
+
+        <!-- Center: sticky vertical line in middle; background image moves left/right. Fully left = left wins, fully right = right wins. -->
+        <div class="tug-center">
+          <div
+            class="tug-image-wrap"
+            [style.transform]="'translateX(' + tugImageTranslatePercent() + '%)'"
+          >
+            <img
+              src="assets/images/rope_pulling_bg.jpg"
+              alt="Two players pulling the rope in tug of war"
+              class="tug-image"
+            />
+          </div>
+          @if (!gameOver()) {
+            <div class="tug-sticky-center" aria-hidden="true">
+              <div class="tug-center-line" aria-hidden="true"></div>
+              <!-- <div
+                class="rope-marker"
+                [class.pull]="ropeJustMoved()"
+                aria-hidden="true"
+              ></div> -->
+            </div>
+          }
+        </div>
+
+        <!-- Right panel: Team 2 -->
+        <aside class="team-panel team2-panel">
+          <div class="panel-header team2-header">
+            <span class="panel-title">Team 2</span>
+            <span class="panel-badge">{{ team2Score() }}</span>
+          </div>
+          @if (opponentProblem(); as oppProblem) {
+            <div class="problem-box team2-box">
+              <div class="problem-text">{{ oppProblem.text }}</div>
+              @if (playMode() === 'computer') {
+                <div class="thinking" [class.solved]="!opponentThinking()">
+                  {{ opponentThinking() ? 'Thinking...' : 'Solved!' }}
+                </div>
+              } @else {
+                <input
+                  type="text"
+                  inputmode="none"
+                  class="answer-input"
+                  [(ngModel)]="friendAnswer"
+                  (keydown.enter)="submitFriendAnswer()"
+                  placeholder="0"
+                  [class.wrong]="showFriendWrong()"
+                  [attr.aria-label]="'Team 2 answer for ' + oppProblem.text"
+                  readonly
+                />
+                @if (showFriendWrong()) {
+                  <div class="wrong-hint">Try again!</div>
+                }
+                <div class="virtual-keypad" role="group" aria-label="Number keypad for Team 2">
+                  <div class="keypad-grid">
+                    @for (d of [1,2,3,4,5,6,7,8,9]; track d) {
+                      <button type="button" class="keypad-btn" (click)="keypadDigit('right', d)">{{ d }}</button>
+                    }
+                  </div>
+                  <div class="keypad-actions">
+                    <button type="button" class="keypad-btn keypad-0" (click)="keypadDigit('right', 0)">0</button>
+                    <button type="button" class="keypad-btn keypad-clear" (click)="keypadClear('right')" aria-label="Clear">✕</button>
+                    <button type="button" class="keypad-btn keypad-submit" (click)="submitFriendAnswer()" aria-label="Submit">✓</button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </aside>
+      </div>
+
+      <!-- Progress track (animated, user-friendly) -->
+      <div class="track-container" aria-label="Game progress">
+        <div class="track">
+          <div class="track-glow"></div>
+          <div class="track-bar">
+            <div class="track-segment track-left"></div>
+            <div class="track-center-line"></div>
+            <div class="track-segment track-right"></div>
+          </div>
+        </div>
+        <div
+          class="track-marker"
+          [class.pull]="ropeJustMoved()"
+          [style.left]="ropePositionPercent()"
+          aria-hidden="true"
+        >
+          <span class="track-marker-inner"></span>
+        </div>
+      </div>
+
+      <button type="button" class="btn-back" (click)="gameStarted.set(false); gameOver.set(false)">
+        Back to setup
+      </button>
+    </div>
+  }
+
+  <!-- Game over overlay -->
+  @if (gameStarted() && gameOver()) {
+    <div class="overlay" role="alert">
+      <div class="result-card" [class.win]="youWon()" [class.lose]="!youWon()">
+        @if (youWon()) {
+          <h2>🎉 Team 1 wins!</h2>
+          <p>Team 1 pulled the rope to their side. Great math skills!</p>
+        } @else {
+          <h2>🎉 Team 2 wins!</h2>
+          <p>Team 2 pulled the rope to their side. Well done!</p>
+        }
+        <p class="result-time">Time: {{ timerDisplay() }}</p>
+        <button type="button" class="btn-play-again" (click)="startGame()">
+          Play again
+        </button>
+      </div>
+    </div>
+  }
+</div>
