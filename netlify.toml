@@ -1,0 +1,10 @@
+# Set MONGODB_URI in Netlify: Site settings → Environment variables
+[build]
+  publish = "front_end/dist/my-game/browser"
+  command = "cd front_end && npm ci && npm run build"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200

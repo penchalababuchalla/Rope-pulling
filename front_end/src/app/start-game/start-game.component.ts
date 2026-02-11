@@ -1,6 +1,8 @@
 import { Component, OnDestroy, signal, computed } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../auth/auth.service';
 
 type ProblemType = 'multiply' | 'divide' | 'add' | 'subtract' | 'both' | 'all';
 
@@ -30,8 +32,18 @@ export class StartGameComponent implements OnDestroy {
   ropePosition = signal(50);
   selectedNumbers = signal<number[]>([2, 3, 4, 5]);
   problemType = signal<ProblemType>('multiply');
-  /** 'computer' = you vs CPU; 'friend' = two players on same device */
+  /** 'computer' = you vs CPU; 'friend' = play with friends online (host or join) */
   playMode = signal<'computer' | 'friend'>('computer');
+  /** When playMode is 'friend': 'none' | 'host' | 'join' */
+  friendRole = signal<'none' | 'host' | 'join'>('none');
+  /** Room code when hosting (for sharing; ready for Socket.io) */
+  roomCode = signal<string>('');
+  /** Join code input when joining (ready for Socket.io) */
+  joinCodeInput = '';
+  /** Copy feedback */
+  copySuccess = signal(false);
+  /** Placeholder: when we have Socket.io, host waits for players; join connects with code */
+  onlineStatus = signal<'idle' | 'waiting' | 'joined'>('idle');
 
   currentProblem = signal<MathProblem | null>(null);
   playerAnswer = '';
@@ -53,6 +65,11 @@ export class StartGameComponent implements OnDestroy {
   private gameTimer: ReturnType<typeof setInterval> | null = null;
   private gameStartTime = 0;
   readonly numberOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+  constructor(
+    public auth: AuthService,
+    private router: Router
+  ) {}
 
   ropePositionPercent = computed(() => `${this.ropePosition()}%`);
   /** Background image translate: 0 = center, -50 = fully left (left wins), +50 = fully right (right wins). Vertical line stays fixed. */
@@ -79,6 +96,70 @@ export class StartGameComponent implements OnDestroy {
 
   setPlayMode(mode: 'computer' | 'friend'): void {
     this.playMode.set(mode);
+    if (mode === 'computer') {
+      this.friendRole.set('none');
+      this.roomCode.set('');
+      this.onlineStatus.set('idle');
+    } else {
+      this.friendRole.set('none');
+      this.roomCode.set('');
+      this.joinCodeInput = '';
+      this.onlineStatus.set('idle');
+    }
+  }
+
+  setFriendRole(role: 'host' | 'join'): void {
+    this.friendRole.set(role);
+    this.copySuccess.set(false);
+    if (role === 'host') {
+      this.roomCode.set(this.generateRoomCode());
+      this.onlineStatus.set('waiting');
+    } else {
+      this.roomCode.set('');
+      this.joinCodeInput = '';
+      this.onlineStatus.set('idle');
+    }
+  }
+
+  /** Generate a 6-character alphanumeric room code (Socket.io-ready) */
+  generateRoomCode(): string {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 6; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  }
+
+  async copyRoomCodeToClipboard(): Promise<void> {
+    const code = this.roomCode();
+    if (!code) return;
+    try {
+      await navigator.clipboard.writeText(code);
+      this.copySuccess.set(true);
+      setTimeout(() => this.copySuccess.set(false), 2500);
+    } catch {
+      this.copySuccess.set(false);
+    }
+  }
+
+  joinWithCode(): void {
+    const code = this.joinCodeInput.trim().toUpperCase();
+    if (!code) return;
+    // Placeholder: Socket.io will connect and join room with this code
+    this.onlineStatus.set('joined');
+  }
+
+  backFromFriendRole(): void {
+    this.friendRole.set('none');
+    this.roomCode.set('');
+    this.joinCodeInput = '';
+    this.onlineStatus.set('idle');
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/login']);
   }
 
   startGame(): void {

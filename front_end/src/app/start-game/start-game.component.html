@@ -2,7 +2,15 @@
   <!-- Setup screen -->
   @if (!gameStarted()) {
     <div class="setup-card">
-      <h1 class="title">Tug of War: Mathematics</h1>
+      <div class="setup-header">
+        <h1 class="title">Tug of War: Mathematics</h1>
+        @if (auth.username(); as name) {
+          <div class="user-bar">
+            <span class="user-name">{{ name }}</span>
+            <button type="button" class="btn-logout" (click)="logout()">Log out</button>
+          </div>
+        }
+      </div>
       <p class="subtitle">Solve fast! Pull the rope to your side. First to pull it all the way wins.</p>
 
       <div class="setup-section">
@@ -94,13 +102,78 @@
             (click)="setPlayMode('friend')"
           >
             <span class="mode-icon">👥</span>
-            Play with Friend
+            Play with Friends
           </button>
         </div>
+
+        @if (playMode() === 'friend') {
+          <div class="friend-options">
+            @if (friendRole() === 'none') {
+              <div class="host-join-buttons">
+                <button type="button" class="host-join-btn host-btn" (click)="setFriendRole('host')">
+                  <span class="host-join-icon">🏠</span>
+                  Host a game
+                </button>
+                <button type="button" class="host-join-btn join-btn" (click)="setFriendRole('join')">
+                  <span class="host-join-icon">🔗</span>
+                  Join a game
+                </button>
+              </div>
+            }
+
+            @if (friendRole() === 'host') {
+              <div class="room-code-card">
+                <p class="room-code-label">Your room code</p>
+                <div class="room-code-value">{{ roomCode() }}</div>
+                <button type="button" class="btn-copy" (click)="copyRoomCodeToClipboard()">
+                  @if (copySuccess()) {
+                    <span class="copy-icon">✓</span> Copied!
+                  } @else {
+                    <span class="copy-icon">📋</span> Copy code
+                  }
+                </button>
+                <p class="room-code-hint">Share this code with friends so they can join</p>
+                <button type="button" class="btn-back-role" (click)="backFromFriendRole()">← Back</button>
+              </div>
+            }
+
+            @if (friendRole() === 'join') {
+              <div class="join-card">
+                <p class="join-label">Enter room code</p>
+                <input
+                  type="text"
+                  class="join-input"
+                  [(ngModel)]="joinCodeInput"
+                  placeholder="e.g. ABC123"
+                  maxlength="8"
+                  (keydown.enter)="joinWithCode()"
+                />
+                <button type="button" class="btn-join" (click)="joinWithCode()">
+                  Join game
+                </button>
+                @if (onlineStatus() === 'joined') {
+                  <p class="joined-msg">Joined! Waiting for host to start…</p>
+                }
+                <button type="button" class="btn-back-role" (click)="backFromFriendRole()">← Back</button>
+              </div>
+            }
+          </div>
+        }
       </div>
 
-      <button type="button" class="btn-start" (click)="startGame()">
-        Start game
+      <button
+        type="button"
+        class="btn-start"
+        (click)="startGame()"
+        [disabled]="playMode() === 'friend' && (friendRole() === 'none' || friendRole() === 'join')"
+      >
+        @if (playMode() === 'computer') {
+          Start game
+        } @else if (friendRole() === 'host') {
+          Start game
+        } @else {
+          Start game
+        }
       </button>
     </div>
   }

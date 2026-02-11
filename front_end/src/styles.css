@@ -1,5 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
+html, body {
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
 /* Start-game (Tug of War) – moved here to meet component style budget */
 app-start-game {
   --you-color: #2563eb;
@@ -34,6 +44,28 @@ app-start-game .setup-card {
   box-shadow: 0 4px 24px var(--shadow);
   border: 1px solid var(--grid);
 }
+
+app-start-game .setup-header { position: relative; margin-bottom: 0.25rem; }
+app-start-game .user-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+app-start-game .user-name { font-size: 0.85rem; color: #64748b; font-weight: 500; }
+app-start-game .btn-logout {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+app-start-game .btn-logout:hover { color: #0ea5e9; background: #e0f2fe; }
 
 app-start-game .title {
   font-size: 1.75rem;
@@ -111,6 +143,114 @@ app-start-game .mode-btn {
 app-start-game .mode-btn:hover { border-color: var(--you-color); color: var(--you-color); background: #eff6ff; }
 app-start-game .mode-btn.active { background: linear-gradient(135deg, var(--you-color), #1d4ed8); border-color: var(--you-color); color: white; }
 app-start-game .mode-icon { font-size: 1.25rem; }
+
+/* Play with friends: Host / Join */
+app-start-game .friend-options { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--grid); }
+app-start-game .host-join-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+app-start-game .host-join-btn {
+  flex: 1;
+  min-width: 140px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  border: 2px solid var(--grid);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+app-start-game .host-join-btn.host-btn {
+  background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: #22c55e;
+  color: #166534;
+}
+app-start-game .host-join-btn.host-btn:hover { border-color: #16a34a; background: #dcfce7; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25); }
+app-start-game .host-join-btn.join-btn {
+  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+  border-color: #3b82f6;
+  color: #1d4ed8;
+}
+app-start-game .host-join-btn.join-btn:hover { border-color: #2563eb; background: #dbeafe; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25); }
+app-start-game .host-join-icon { font-size: 1.35rem; }
+app-start-game .room-code-card,
+app-start-game .join-card {
+  padding: 1.25rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 16px;
+  border: 2px solid var(--grid);
+  margin-top: 0.5rem;
+}
+app-start-game .room-code-label,
+app-start-game .join-label { font-size: 0.9rem; font-weight: 600; color: #475569; margin: 0 0 0.5rem; }
+app-start-game .room-code-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: #0f172a;
+  margin: 0 0 1rem;
+  font-variant-numeric: tabular-nums;
+}
+app-start-game .btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
+}
+app-start-game .btn-copy:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4); }
+app-start-game .copy-icon { font-size: 1.1rem; }
+app-start-game .room-code-hint { font-size: 0.8rem; color: #64748b; margin: 0.75rem 0 0; }
+app-start-game .join-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  box-sizing: border-box;
+}
+app-start-game .join-input:focus { outline: none; border-color: #3b82f6; }
+app-start-game .btn-join {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+}
+app-start-game .btn-join:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4); }
+app-start-game .joined-msg { font-size: 0.9rem; color: #16a34a; font-weight: 600; margin: 0.75rem 0 0; }
+app-start-game .btn-back-role {
+  display: block;
+  margin: 1rem 0 0;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #64748b;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+app-start-game .btn-back-role:hover { color: var(--you-color); }
+app-start-game .btn-start:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
 app-start-game .btn-start {
   width: 100%;
@@ -497,3 +637,148 @@ app-start-game .btn-play-again {
   transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 app-start-game .btn-play-again:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
+
+/* ========== Mobile responsive ========== */
+@media (max-width: 768px) {
+  app-start-game .game-container { padding: 0.75rem; }
+  app-start-game .setup-card {
+    margin: 1rem auto;
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+  app-start-game .setup-header { margin-bottom: 0.5rem; }
+  app-start-game .title { font-size: 1.4rem; }
+  app-start-game .subtitle { font-size: 0.9rem; margin: 0 0 1.25rem; }
+  app-start-game .user-bar { position: static; justify-content: flex-end; margin-top: 0.25rem; }
+  app-start-game .chip {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+  app-start-game .type-btn { padding: 0.6rem 0.9rem; min-height: 44px; }
+  app-start-game .mode-btn { min-width: 100%; min-height: 48px; }
+  app-start-game .host-join-btn { min-width: 100%; min-height: 48px; }
+  app-start-game .room-code-value { font-size: 1.5rem; letter-spacing: 0.15em; }
+  app-start-game .btn-start { min-height: 48px; padding: 0.9rem 1rem; }
+
+  /* Game area: stack vertically on small screens */
+  app-start-game .game-area.tug-theme { padding: 0 0.5rem 1rem; }
+  app-start-game .game-area.tug-theme .game-header {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    min-width: 0;
+  }
+  app-start-game .game-area.tug-theme .game-title {
+    font-size: 1rem;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  app-start-game .game-area.tug-theme .header-btn {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  app-start-game .game-area.tug-theme .main-title { font-size: 1.15rem; margin-bottom: 0.75rem; }
+  app-start-game .game-area.tug-theme .scoreboard {
+    padding: 0.6rem 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  app-start-game .game-area.tug-theme .scoreboard-value { font-size: 1.5rem; }
+  app-start-game .game-area.tug-theme .scoreboard-timer { font-size: 1rem; }
+  app-start-game .game-area.tug-theme .game-row {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  app-start-game .game-area.tug-theme .team-panel {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+  }
+  app-start-game .game-area.tug-theme .team1-panel { order: 1; }
+  app-start-game .game-area.tug-theme .tug-center {
+    flex: 0 0 auto;
+    min-width: 0;
+    min-height: 100px;
+    order: 2;
+  }
+  app-start-game .game-area.tug-theme .tug-image-wrap { min-height: 90px; }
+  app-start-game .game-area.tug-theme .tug-image { min-height: 80px; max-width: 280px; }
+  app-start-game .game-area.tug-theme .team2-panel { order: 3; }
+  app-start-game .game-area.tug-theme .team1-box .answer-input,
+  app-start-game .game-area.tug-theme .team2-box .answer-input {
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    min-height: 48px;
+  }
+  app-start-game .game-area.tug-theme .keypad-btn,
+  app-start-game .game-area.tug-theme .keypad-clear,
+  app-start-game .game-area.tug-theme .keypad-submit {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    font-size: 1.2rem;
+  }
+  app-start-game .game-area.tug-theme .keypad-grid { gap: 8px; margin-bottom: 8px; }
+  app-start-game .game-area.tug-theme .keypad-actions { gap: 8px; }
+  app-start-game .track-container {
+    margin: 1rem 0.75rem 1rem;
+    height: 40px;
+  }
+  app-start-game .track-marker { width: 20px; height: 24px; }
+  app-start-game .track-marker-inner {
+    border-left-width: 8px;
+    border-right-width: 8px;
+    border-top-width: 12px;
+  }
+  app-start-game .btn-back { min-height: 44px; padding: 0.6rem 1rem; margin-top: 0.5rem; }
+  app-start-game .overlay {
+    padding: 0;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+  app-start-game .result-card {
+    padding: 1.5rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    max-width: 100%;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+  }
+  app-start-game .result-card h2 { font-size: 1.4rem; }
+  app-start-game .result-card p { font-size: 0.95rem; }
+  app-start-game .btn-play-again { min-height: 48px; }
+}
+
+@media (max-width: 480px) {
+  app-start-game .game-container { padding: 0.5rem; }
+  app-start-game .setup-card { padding: 1rem; margin: 0.5rem auto; }
+  app-start-game .title { font-size: 1.25rem; }
+  app-start-game .setup-section h2 { font-size: 0.85rem; }
+  app-start-game .room-code-value { font-size: 1.35rem; letter-spacing: 0.1em; }
+  app-start-game .game-area.tug-theme .game-title { font-size: 0.95rem; }
+  app-start-game .game-area.tug-theme .main-title { font-size: 1rem; }
+  app-start-game .game-area.tug-theme .panel-header { padding: 0.5rem 0.75rem; font-size: 0.9rem; }
+  app-start-game .game-area.tug-theme .team1-box,
+  app-start-game .game-area.tug-theme .team2-box { padding: 0.75rem; margin: 0.35rem; }
+  app-start-game .game-area.tug-theme .problem-text { font-size: 1rem; }
+  app-start-game .game-area.tug-theme .keypad-btn,
+  app-start-game .game-area.tug-theme .keypad-clear,
+  app-start-game .game-area.tug-theme .keypad-submit {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 1.1rem;
+  }
+}
