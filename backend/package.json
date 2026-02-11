@@ -1,0 +1,17 @@
+{
+  "name": "my-game-backend",
+  "version": "1.0.0",
+  "description": "Backend API for my-game (startgame / tug of war)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "private": true,
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "uuid": "^10.0.0"
+  }
+}
