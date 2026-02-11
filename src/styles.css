@@ -1,1 +1,499 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Start-game (Tug of War) – moved here to meet component style budget */
+app-start-game {
+  --you-color: #2563eb;
+  --you-bg: #dbeafe;
+  --opponent-color: #dc2626;
+  --opponent-bg: #fee2e2;
+  --rope-color: #1f2937;
+  --marker-color: #dc2626;
+  --track-center: #dc2626;
+  --track-zone: #16a34a;
+  --paper: #fafaf9;
+  --grid: #e7e5e4;
+  --shadow: rgba(0, 0, 0, 0.12);
+}
+
+app-start-game .game-container {
+  min-height: 100vh;
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  padding: 1.5rem;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  position: relative;
+}
+
+app-start-game .setup-card {
+  max-width: 420px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px var(--shadow);
+  border: 1px solid var(--grid);
+}
+
+app-start-game .title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1c1917;
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+
+app-start-game .subtitle {
+  color: #57534e;
+  font-size: 0.95rem;
+  margin: 0 0 1.75rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+app-start-game .setup-section { margin-bottom: 1.5rem; }
+app-start-game .setup-section h2 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #44403c;
+  margin: 0 0 0.75rem;
+}
+
+app-start-game .number-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+app-start-game .chip {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--grid);
+  background: white;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #57534e;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+app-start-game .chip:hover { border-color: var(--you-color); color: var(--you-color); transform: scale(1.05); }
+app-start-game .chip-selected { background: var(--you-color); border-color: var(--you-color); color: white; }
+
+app-start-game .type-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+app-start-game .type-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  border: 2px solid var(--grid);
+  background: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #57534e;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+app-start-game .type-btn:hover { border-color: var(--you-color); color: var(--you-color); }
+app-start-game .type-btn.active { background: var(--you-color); border-color: var(--you-color); color: white; }
+
+app-start-game .play-mode-buttons { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+app-start-game .mode-btn {
+  flex: 1;
+  min-width: 140px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  border: 2px solid var(--grid);
+  background: white;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #57534e;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+app-start-game .mode-btn:hover { border-color: var(--you-color); color: var(--you-color); background: #eff6ff; }
+app-start-game .mode-btn.active { background: linear-gradient(135deg, var(--you-color), #1d4ed8); border-color: var(--you-color); color: white; }
+app-start-game .mode-icon { font-size: 1.25rem; }
+
+app-start-game .btn-start {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--you-color), #1d4ed8);
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+app-start-game .btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45); }
+app-start-game .btn-start:active { transform: translateY(0); }
+
+app-start-game .game-area { max-width: 900px; margin: 0 auto; padding: 1rem 0; }
+app-start-game .game-area.tug-theme {
+  max-width: 100%;
+  padding: 0 1rem 1rem;
+  background: linear-gradient(180deg, #f0f9ff 0%, #fafafa 100%);
+}
+
+app-start-game .game-area.tug-theme .game-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  margin-bottom: 0.5rem;
+}
+app-start-game .game-area.tug-theme .header-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+app-start-game .game-area.tug-theme .header-btn:hover { background: #d1d5db; }
+app-start-game .game-area.tug-theme .game-title { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin: 0; }
+app-start-game .game-area.tug-theme .main-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+}
+app-start-game .game-area.tug-theme .scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 420px;
+  margin: 0 auto 1.25rem;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+app-start-game .game-area.tug-theme .scoreboard-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+app-start-game .game-area.tug-theme .scoreboard-team.team1 .scoreboard-label { color: #0ea5e9; font-weight: 700; }
+app-start-game .game-area.tug-theme .scoreboard-team.team2 .scoreboard-label { color: #f97316; font-weight: 700; }
+app-start-game .game-area.tug-theme .scoreboard-value { font-size: 1.75rem; font-weight: 800; color: #1e293b; }
+app-start-game .game-area.tug-theme .scoreboard-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.9rem;
+  background: #1e293b;
+  color: white;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+app-start-game .game-area.tug-theme .game-row {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+app-start-game .game-area.tug-theme .team-panel {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+app-start-game .game-area.tug-theme .team1-panel { background: linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 100%); border: 2px solid #0ea5e9; }
+app-start-game .game-area.tug-theme .team2-panel { background: linear-gradient(180deg, #ffedd5 0%, #fff7ed 100%); border: 2px solid #f97316; }
+app-start-game .game-area.tug-theme .panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  font-weight: 700;
+}
+app-start-game .game-area.tug-theme .team1-header { background: #0ea5e9; color: white; }
+app-start-game .game-area.tug-theme .team2-header { background: #f97316; color: white; }
+app-start-game .game-area.tug-theme .panel-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 0.35rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  font-size: 1rem;
+}
+app-start-game .game-area.tug-theme .team1-box {
+  padding: 1rem;
+  background: white;
+  margin: 0.5rem;
+  border-radius: 14px;
+  border: 2px solid #0ea5e9;
+}
+app-start-game .game-area.tug-theme .team2-box {
+  padding: 1rem;
+  background: white;
+  margin: 0.5rem;
+  border-radius: 14px;
+  border: 2px solid #f97316;
+}
+app-start-game .game-area.tug-theme .team1-box .problem-text { color: #0369a1; }
+app-start-game .game-area.tug-theme .team2-box .problem-text { color: #c2410c; }
+app-start-game .game-area.tug-theme .team1-box .answer-input {
+  width: 100%;
+  max-width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.6rem;
+  font-size: 1.25rem;
+  border: 2px solid #e0f2fe;
+  border-radius: 10px;
+}
+app-start-game .game-area.tug-theme .team2-box .answer-input {
+  width: 100%;
+  max-width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.6rem;
+  font-size: 1.25rem;
+  border: 2px solid #ffedd5;
+  border-radius: 10px;
+}
+app-start-game .game-area.tug-theme .tug-center {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+app-start-game .game-area.tug-theme .tug-image-wrap {
+  background-color: white;
+  position: relative;
+  width: 100%;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+app-start-game .game-area.tug-theme .tug-image {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  min-height: 120px;
+  object-fit: contain;
+  display: block;
+}
+app-start-game .game-area.tug-theme .tug-sticky-center {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+app-start-game .game-area.tug-theme .tug-sticky-center .tug-center-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 2px dashed rgba(148, 163, 184, 0.9);
+  z-index: 1;
+}
+app-start-game .game-area.tug-theme .tug-sticky-center .rope-marker {
+  position: relative;
+  width: 0;
+  height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 20px solid #dc2626;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+  z-index: 2;
+}
+app-start-game .game-area.tug-theme .virtual-keypad { max-width: 100%; margin-top: 0.5rem; }
+app-start-game .game-area.tug-theme .keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 6px;
+}
+app-start-game .game-area.tug-theme .keypad-actions { display: flex; gap: 6px; align-items: center; }
+app-start-game .game-area.tug-theme .keypad-actions .keypad-0 { flex: 1; min-width: 0; }
+app-start-game .game-area.tug-theme .keypad-clear {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  background: #fecaca !important;
+  color: #dc2626 !important;
+  font-size: 1.25rem;
+}
+app-start-game .game-area.tug-theme .keypad-submit {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  background: #0ea5e9 !important;
+  color: white !important;
+  font-size: 1.25rem;
+}
+app-start-game .game-area.tug-theme .keypad-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: 2px solid var(--grid);
+  background: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+app-start-game .game-area.tug-theme .keypad-btn:hover { border-color: var(--you-color); background: #eff6ff; }
+app-start-game .game-area.tug-theme .btn-back {
+  display: block;
+  margin: 1rem auto 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: #57534e;
+  background: white;
+  border: 2px solid var(--grid);
+  border-radius: 10px;
+  cursor: pointer;
+}
+app-start-game .game-area.tug-theme .btn-back:hover { border-color: var(--you-color); color: var(--you-color); }
+
+app-start-game .answer-input.wrong { border-color: var(--opponent-color); animation: start-game-shake 0.4s ease; }
+@keyframes start-game-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+app-start-game .wrong-hint { margin-top: 0.5rem; font-size: 0.85rem; color: var(--opponent-color); font-weight: 600; }
+app-start-game .thinking { font-size: 0.95rem; color: #78716c; font-weight: 500; }
+app-start-game .thinking.solved { color: var(--track-zone); font-weight: 600; }
+
+app-start-game .track-container {
+  position: relative;
+  height: 44px;
+  margin: 1.25rem 2rem 1.5rem;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+app-start-game .track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  border-radius: 999px;
+  overflow: visible;
+}
+app-start-game .track-glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.12) 0%, rgba(34, 197, 94, 0.3) 50%, rgba(220, 38, 38, 0.12) 100%);
+  filter: blur(8px);
+  opacity: 0.85;
+}
+app-start-game .track-bar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.25), inset 0 -1px 2px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+app-start-game .track-segment { flex: 1; min-width: 0; transition: opacity 0.3s ease; }
+app-start-game .track-left { background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%); }
+app-start-game .track-right { background: linear-gradient(270deg, #22c55e 0%, #16a34a 100%); }
+app-start-game .track-center-line {
+  flex: 0 0 4px;
+  min-width: 4px;
+  background: linear-gradient(180deg, transparent 0%, #dc2626 50%, transparent 100%);
+  box-shadow: 0 0 8px rgba(220, 38, 38, 0.4);
+}
+app-start-game .track-marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 3;
+}
+app-start-game .track-marker-inner {
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 14px solid #dc2626;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+app-start-game .overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: start-game-fadeIn 0.25s ease;
+}
+@keyframes start-game-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+app-start-game .result-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 340px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  animation: start-game-popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes start-game-popIn {
+  from { opacity: 0; transform: scale(0.9) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+app-start-game .result-card h2 { font-size: 1.75rem; margin: 0 0 0.5rem; color: #1c1917; }
+app-start-game .result-card p { color: #57534e; margin: 0 0 1.5rem; font-size: 1rem; }
+app-start-game .result-card .result-time { margin: 0 0 1.25rem; font-size: 0.95rem; font-weight: 600; color: #44403c; font-variant-numeric: tabular-nums; }
+app-start-game .result-card.win h2 { color: #15803d; }
+app-start-game .result-card.lose h2 { color: var(--opponent-color); }
+app-start-game .btn-play-again {
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--you-color), #1d4ed8);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+app-start-game .btn-play-again:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4); }
